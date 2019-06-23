@@ -1,0 +1,23 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Test API
+Resources:
+  ProcessPackages:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: process.handler
+      Runtime: nodejs8.10
+      Policies: 
+        - AmazonSQSFullAccess
+        - AmazonRDSFullAccess
+      Environment:
+        Variables:
+          RDS_HOSTNAME:
+          RDS_USERNAME:
+          RDS_PASSWORD:
+          RDS_PORT: 3006
+      Events:
+        ProcessPackagesScheduledEvent::
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 minute)

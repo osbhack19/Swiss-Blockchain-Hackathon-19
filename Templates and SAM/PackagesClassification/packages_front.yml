@@ -1,0 +1,215 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Packages Main API. Packages will be stored in a DynamoDB table, and decouple the process through its steam.
+Parameters:
+  PackageCreatorPassword:
+    NoEcho: "true"
+    Type: "String"
+    Description: "Password for the IAM user MyPublishUser"
+    MinLength: "1"
+    MaxLength: "41"
+    AllowedPattern: "[a-zA-Z0-9]*"
+    ConstraintDescription: "must contain only alphanumeric characters."
+  PackageProcessorPassword:
+    NoEcho: "true"
+    Type: "String"
+    Description: "Password for the IAM user MyQueueUser"
+    MinLength: "1"
+    MaxLength: "41"
+    ConstraintDescription: "password must be between 1 and 41 characters."
+Resources:
+  ProcessDynamoDBStream:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs8.10
+      Policies: AWSLambdaDynamoDBExecutionRole
+      Events:
+        Stream:
+          Type: DynamoDB
+          Properties:
+            Stream: !GetAtt DynamoDBTable.StreamArn
+            BatchSize: 100
+            StartingPosition: TRIM_HORIZON
+  DynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - 
+          AttributeName: "CarrierOfficeId"
+          AttributeType: "N"
+        - 
+          AttributeName: "PackageId"
+          AttributeType: "S"
+        - 
+          AttributeName: "CreationTimestamp"
+          AttributeType: "N"
+      KeySchema: 
+        - 
+          AttributeName: "CarrierOfficeId"
+          KeyType: "HASH"
+        - 
+          AttributeName: "PackageId"
+          KeyType: "RANGE"
+      LocalSecondaryIndexes:
+        - IndexName: "CreationTimestampIndex"
+          KeySchema:
+            -
+              AttributeName: "CarrierOfficeId"
+              KeyType: HASH
+            -
+              AttributeName: "CreationTimestamp"
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      ProvisionedThroughput: 
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      StreamSpecification:
+        StreamViewType: NEW_IMAGE
+      TableName: Packages
+  IncomingPackages:
+    Type: "AWS::SNS::Topic"
+    Properties:
+      Subscription:
+        -
+          Endpoint:
+            Fn::GetAtt:
+              - "IncomingPackagesQueue"
+              - "Arn"
+          Protocol: "sqs"
+  IncomingPackagesQueue:
+    Type: "AWS::SQS::Queue"
+  PackageCreator:
+    Type: "AWS::IAM::User"
+    Properties:
+      LoginProfile:
+        Password:
+          Ref: "PackageCreatorPassword"
+  PackageCreatorKey:
+    Type: "AWS::IAM::AccessKey"
+    Properties:
+      UserName:
+        Ref: "PackageCreator"
+  IncomingPackagesGroup:
+    Type: "AWS::IAM::Group"
+    Properties:
+      Policies:
+        -
+          PolicyName: "MyTopicGroupPolicy"
+          PolicyDocument:
+            Statement:
+              -
+                Effect: "Allow"
+                Action:
+                  - "sns:Publish"
+                Resource:
+                  Ref: "IncomingPackages"
+  AddPackageCreatorToIncomingPackagesGroup:
+    Type: AWS::IAM::UserToGroupAddition
+    Properties:
+      GroupName:
+        Ref: IncomingPackagesGroup
+      Users:
+      - Ref: PackageCreator      
+  PackageProcessor:
+    Type: "AWS::IAM::User"
+    Properties:
+      LoginProfile:
+        Password:
+          Ref: "PackageProcessorPassword"
+  PackageProcessorKey:
+    Type: "AWS::IAM::AccessKey"
+    Properties:
+      UserName:
+        Ref: "PackageProcessor"
+  RDIncomingQueueGroup:
+    Type: AWS::IAM::Group
+    Properties:
+      Policies:
+      - PolicyName: IncomingQueueGroupPolicy
+        PolicyDocument:
+          Statement:
+          - Effect: Allow
+            Action:
+            - sqs:DeleteMessage
+            - sqs:ReceiveMessage
+            Resource:
+            - Fn::GetAtt:
+              - IncomingPackagesQueue
+              - Arn
+  AddPackageProcessorToIncomingQueueGroup:
+    Type: AWS::IAM::UserToGroupAddition
+    Properties:
+      GroupName:
+        Ref: RDIncomingQueueGroup
+      Users:
+      - Ref: PackageProcessor
+  IncomingQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Id: IncomingQueuePolicy
+        Statement:
+        - Sid: Allow-SendMessage-To-Queue-From-SNS-Topic
+          Effect: Allow
+          Principal:
+            AWS: "*"
+          Action:
+          - sqs:SendMessage
+          Resource: "*"
+          Condition:
+            ArnEquals:
+              aws:SourceArn:
+                Ref: IncomingPackages
+      Queues:
+      - Ref: IncomingPackagesQueue
+      
+      
+      
+Outputs:
+  IncomingPackagesTopicARN:
+    Value:
+      Ref: IncomingPackages
+    Description: Topic ARN of newly created SNS IncomingPackages topic
+  IncomingPackagesQueueInfo:
+    Value:
+      Fn::Join:
+      - " "
+      - - 'ARN:'
+        - Fn::GetAtt:
+          - IncomingPackagesQueue
+          - Arn
+        - 'URL:'
+        - Ref: IncomingPackagesQueue
+    Description: IncomingPackagesQueue details
+  PackageCreatorInfo:
+    Description: Information for Package Creator
+    Value:
+      Fn::Join:
+      - " "
+      - - 'ARN:'
+        - Fn::GetAtt:
+          - PackageCreator
+          - Arn
+        - 'Access Key:'
+        - Ref: PackageCreatorKey
+        - 'Secret Key:'
+        - Fn::GetAtt:
+          - PackageCreatorKey
+          - SecretAccessKey
+  PackageProcessorInfo:
+    Description: Information for Package Processor
+    Value:
+      Fn::Join:
+      - " "
+      - - 'ARN:'
+        - Fn::GetAtt:
+          - MyQueueUser
+          - Arn
+        - 'Access Key:'
+        - Ref: PackageProcessor
+        - 'Secret Key:'
+        - Fn::GetAtt:
+          - PackageProcessorKey
+          - SecretAccessKey
