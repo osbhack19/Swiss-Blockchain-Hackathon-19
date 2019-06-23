@@ -1,0 +1,113 @@
+#padely - deliver parcels and get paid
+
+##Table of Content
+1. Problem statement 
+2. Value proposition
+3. Business Case
+4. Legal Considerations by advisors
+5. Outlook and additional ideas
+
+##Problem statement
+###Unmet customer needs
+- Flexibility of carriers to deliver at specific times and to specific places 
+- ASAP delivery of goods
+- Parcel tracking and real-time status updates
+- Re-route parcels when temporarily or at short-notice not at home
+- Receive packages outside of standard business hours
+- Reduce number of cars / trucks in cities
+- Eco-friendly delivery
+
+###Issues of carriers / Post
+- High costs and legal requirement to deliver to all locations within Switzerland
+- Increasing parcel volumes: current infrastructure can only handle demands until 2020
+- Additional resources (up to 30%) are required during peak-times
+- All parcels move through the packaging and delivery centres across the country even if it needs to be delivered back to the same city
+- Each and every parcel is forced through the same process disregarding customer needs
+
+##Value Proposition
+padely - parcel delivery is an innovative approach to revolutionize the industry
+- We deliver packages  within 30 km on the same day at no additional costs through our network of registered padelees
+- Increasing customer satisfaction is our priority (speed, usability, flexibility)
+- Traditional carriers save ~37% of costs and profits will increase by 10%
+- We earn your TRUST by applying state-of-the art technologies and smart functionalities
+
+
+##Business Case
+
+###Market Volume
+							2018			2019			2020
+Revenue					CHF 1'678'000'000 	N/A				N/A
+Profit					CHF 145'000'000 	N/A				N/A
+Number of parcels			138'000'000 	146'280'000 	155'056'800 
+Growth (number of parcels)		6%				6%				6%
+Av. Price per parcel		CHF 11.50 		CHF 11.50 		CHF 11.50 
+					
+Domestic parcels (number)	90%	124'200'000 		131'652'000 		139'551'120 
+Short-distance (30km radius)	25%	31'050'000 		32'913'000 		34'887'780 
+Private sender (number)		20%	6'210'000 		6'582'600 		6'977'556 
+					
+Business sender	(number)	80%	24'840'000 		26'330'400 	 	27'910'224 
+Small businesses only (number)	40%	9'936'000 		10'532'160 	 	11'164'090 
+					
+Total market for padely (year)		16'146'000 	 	17'114'760 	 	18'141'646 
+Total market for padely (day)		44'236 	 		46'890 	 		49'703 
+					
+Marketshare (%)				5%			10%			20%
+padely parcels (year)			807'300 	 	1'711'476 		3'628'329 
+
+		
+###Current service costs for Post
+	
+- Revenue for post per parcel							CHF 11.50 
+- Profit per parcel	 							CHF 1.05 
+- Cost per parcel delivery							CHF 10.45 
+- Cost for processing 1 (from acceptance to last distribution center)		CHF 5.22 
+	- Cost for acceptance and handing out package (50%)			CHF 2.61 
+- Cost for processing 2 (last mile)						CHF 5.22 
+
+			
+###Pricing & Profits
+Av. price for padely delivery		 CHF 5.00 	 	CHF 5.00 	 	CHF 5.00 
+Earnings of padelee per parcel		 CHF 4.00 		CHF 4.00 	 	CHF 4.00 
+Earnings of padely per parcel		 CHF 1.00 	 	CHF 1.00 	 	CHF 1.00 
+					
+Total earnings for padely (year)		 CHF 807'300 	 	CHF 1'711'476 	 	CHF 3'628'329 
+	
+				
+###Impact on the Post
+Cost per parcel (today)			CHF 10.45		CHF 10.45		CHF 10.45
+Cost per parcel	(new)	 		CHF 7.61 		CHF 7.61 		CHF 7.61 
+Costs saved per parcel (del. by padely)	CHF 2.84 		CHF 2.84 		CHF 2.84 
+Costs saved per parcel (del. by padely)	37%			37%			37%
+
+Profit per parcel (del. by padely)	CHF 3.87 		CHF 3.89 	 	CHF 3.89 
+Total Profit per year (del. by padely)	CHF 3'125'525 	 	CHF 6'653'673 	 	CHF 14'105'787 
+Costs saved per year (del. by padely)*	CHF 2'290'275 		CHF 4'855'383 	 	CHF 10'293'412 
+*Avoidance of additional investments (e.g. for additional regional distribution centers) not included
+
+###Disclaimer and Assumptions
+- The majority of the figures are based on the Annual Report 2018 of the Swiss Post (https://geschaeftsbericht.post.ch/18/ar/app/uploads/EN_Post_Geschaeftsbericht_2018.pdf).
+- Other information (i.e. to determine the overall market size and costs) were either provided the Post Coaches or are based on assumptions (related to industry benchmarks).
+- Parcels from and to large e-commerce players follow a different process and hence are not being considered as "addressable" market for the service od padely.
+
+
+##Legal Considerations by advisors (only in German)
+
+###Laws
+- Das Geldw�schereigesetz (GwG) ist nur anwendbar, wenn eine finanzintermedi�re T�tigkeit vorliegt (z.B. entgegennahme und Weiterleitung von fremden Geldern; Ausgabe eines Zahlungsmittels; Anbeiten eines Zahlungssystems). In diesem Use Case findet das GwG keine Anwendung. 
+Sofern 'padely' das gesamte Geld vom Auftraggeber, z.B. Post erh�lt und sodann weiterleitet w�re das GwG ebenfalls nicht anwendbar, da der Bezahlende nur mit 'padely' ein Vertragsverh�tnis hat und 'padely' im "eigenen" Verh�ltnis mit dem Fahrer eine Zahlung ausf�hrt.
+Ablauf: 'padely' erh�lt Geld vom Kunden z.B. Post (Zahlung f�r die Lieferung); der Kunde bezahlt aber den Lieferant nicht sondern 'padely' bezahlt den Leiferanten damit er gegen�ber 'padely' die Dienstleistung erbringt. Ein solcher Vorgang w�re nicht GwG relevant. Andernfalls w�re auch die Automatisierung �ber einen smart contract m�glich.
+- Es ist m�glich das der Emfp�nger die Post anweist einen Dritten f�r die Leiferung zu beauftragen. Wichtig ist, dass der Leiferant dies nicht "gewerbsm�ssig" macht. Ansonsten muss bei der PostCom eine Meldung gemacht und verschiedene Pflichten eingehalten werden (siehe Postgesetz Art. 4). Gewerbsm�ssigkeit liegt aber nur vor, wenn jemand damit regelm�ssig Eink�nfte erzielt damit den Lebensunterhalt bestreitet. Wichtig ist, dass dies nicht das Problem von 'padely' ist, sondern das Problem des Lieferanten.
+
+###KYC Requirements
+Name, Adresse, Telefonnummer und eine Best�tigung des Wohnsitzes (z.B. auf einem Bankbeleg oder einer Rechnung der Gemeinde) sind sinnvoll.
+Hier noch ein Muster: Hiermit bevollm�chtige ich die in [der App registrierten Lieferanten] meine Pakete vom Absender [z.B. Zalando] zum Zweck der Lieferung entgegenzunehmen und den Empfang zu quittieren. Diese Vollmacht ist gilt bis zum expliziten Wiederruf in der App. 
+Die Post hat schon einige Tools f�r die Vollmacht. Das w�rde sich sicher gut integrieren lassen: https://www.post.ch/de/geschaeftlich/themen-a-z/zusatzleistungen/zusatzleistungen-pakete/signature
+
+
+##Outlook and additional ideas
+- The presentation is focused very much on the Swiss Post, however, the system is designed to collaborate with all 'traditional' carriers and even partnerships with other start-ups, i.e aggrofood can be implemented 
+- The delivery persons (padelees) do not necessarily be human beings, they could also be machines such as drones or other autonomous vehicles
+- The parcel delivery vehicles of the traditional carriers (e.g. streetscooter) could be utilized by the padelees (outside of the standard business hours) for a service fee
+- IoT tracking devices (e.g. Modum) could be added for example for temperature-sensitive parcels or to check if the parcel was opened during the delivery chain
+
