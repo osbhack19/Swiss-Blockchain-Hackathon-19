@@ -1,0 +1,25 @@
+{
+    "GetFunction": {
+        "lambda": {},
+        "apigateway": {
+            "path": "/kyc/asdasd",
+            "method": {
+                "value": "GET",
+                "items": [
+                    "GET"
+                ]
+            }
+        }
+    },
+    "PostFunction": {
+        "apigateway": {
+            "path": "/kyc/tom.smith@gmail.com/approved",
+            "method": {
+                "value": "GET",
+                "items": [
+                    "GET"
+                ]
+            }
+        }
+    }
+}
