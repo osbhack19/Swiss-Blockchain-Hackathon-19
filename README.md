@@ -1,4 +1,3 @@
-# Swiss-Blockchain-Hackathon-19
 # padely - deliver parcels and get paid
 
 For the Swiss Blockchain Hackathon, our team decided to tackle the challenges inside the vertical Intelligence Parcels, more specifically, improve the delivery of parcels on the last mile and avoid unnecessary back- and forth-movements of parcels.
@@ -59,7 +58,7 @@ After being approved, the driver needs to stake a given quantity of money. We pl
  
 ### Packages Pick-Up
 
-Once a package is picked-up, the post office will send a transaction to the smart contract with the amount to be paid to the driver is sent. This money is stored in the smartcontract and paid to the user once the package is delivered. 
+Once a package is picked-up, the post office will send a transaction to the smart contract with the amount to be paid to the driver is sent. This money is stored in the smart contract and paid to the user once the package is delivered. 
 
 ### Packages Delivery to the final destination
  
@@ -78,19 +77,19 @@ The cash-out is done directly from the created account of the driver to his own 
 ### API Documentation 
 We are proposing 4 api using the URL: https://ml0x15kkrc.execute-api.us-east-1.amazonaws.com/Prod/driver
 
-/changeOwnership   POST	To register a new driver into the system
+`/changeOwnership   POST` To register a new driver into the system
 
-/createdriver   POST	To track who own the package based on the last handover
+`/createdriver   POST` To track who own the package based on the last handover
 
-/getDrivers  GET	To facilitate the search of driver who needs to be approved
+`/getDrivers  GET` To facilitate the search of driver who needs to be approved
 
-/searchPackage  GET	To allow a driver to see the list of packages available for the delivery.
+`/searchPackage  GET`To allow a driver to see the list of packages available for the delivery.
 
 ### Datamodel
 Our solution proposes to use Ethereum and an Aurora dB.
 Here are the 2 mains table that we can present.
 
-
+```
 TABLE `DriverTable` (
   `username` varchar(255) DEFAULT NULL,		
   `DriverAddress` varchar(255) DEFAULT NULL,
@@ -106,7 +105,9 @@ TABLE `DriverTable` (
   `IS_KYC` tinyint(1) DEFAULT NULL,
   `Firstname` varchar(255) DEFAULT NULL,
   `Surname` varchar(255) DEFAULT NULL)
+```
 
+```
 TABLE `PackageTable` (
   `id` mediumtext,
   `PackageId` mediumtext,
@@ -122,11 +123,12 @@ TABLE `PackageTable` (
   `EthereumAddress` varchar(255) DEFAULT NULL,
   `PackagePosition` varchar(255) DEFAULT NULL,
   `PackageLevel` varchar(255) DEFAULT NULL)
+```
 
 ### AWS Architecture
-Most of the workloads for the current system rely on AWS System, especially on the AWS serverless. That provides the high escalability and reliability that such a system demand.
+Most of the workloads for the current system rely on AWS System, especially on the AWS serverless. That provides the high scalability and reliability that such a system demand.
 
-The Application Front-end consumes several API's provided by the AWS API Gateway, whose endpoints are AWS Lambda Functions. The User Regisration and Authorization process is made through an AWS Cognito User Pool together with an AWS Aurora DB for KYC data.
+The Application Front-end consumes several API's provided by the AWS API Gateway, whose endpoints are AWS Lambda Functions. The User Registration and Authorization process is made through an AWS Cognito User Pool together with an AWS Aurora DB for KYC data.
 
 Data for the main entities (Packages and Deliverers) are stored through the system in the Ethereum Blockchain, and also on AWS Dynamo DB and AWS Aurora DB. 
 
@@ -138,4 +140,4 @@ The system brings togather traditional carriers and private deliverers, and it c
 - Exact time delivery
 
 ### Package Classification using ML model
-(Under development) The desing of the system includes a highly performant Packages classification system based on AWS Dynamo DB, AWS Lambda Functions, AWS SNS and AWS SQS, together with some ML models deployed to identify the availabilty and potential for packets to be delivered through any of these alternative systems.
+(Under development) The design of the system includes a highly performant Packages classification system based on AWS Dynamo DB, AWS Lambda Functions, AWS SNS and AWS SQS, together with some ML models deployed to identify the availability and potential for packets to be delivered through any of these alternative systems.
