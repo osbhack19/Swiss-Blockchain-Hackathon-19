@@ -78,7 +78,9 @@ The cash-out is done directly from the created account of the driver to his own 
 We are proposing 4 api using the URL: https://ml0x15kkrc.execute-api.us-east-1.amazonaws.com/Prod/driver
 
 `/changeOwnership   POST` To register a new driver into the system
+
 JSON to send
+
 ``{
     name: 'Samantha Candliss',
     city: 'Geneva',
@@ -86,7 +88,9 @@ JSON to send
  }``
   
 `/createdriver   POST` To track who own the package based on the last handover
+
 JSON to send:
+
 ``{
   "DriverAddress": "10 street Barbue 1204 Morges",
   "Email": "tom.smith@gmail.com",
