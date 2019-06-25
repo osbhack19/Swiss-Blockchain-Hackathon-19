@@ -79,15 +79,15 @@ We are proposing 4 api using the URL: https://ml0x15kkrc.execute-api.us-east-1.a
 
 `/changeOwnership   POST` To register a new driver into the system
 JSON to send
-```{
+``{
     name: 'Samantha Candliss',
     city: 'Geneva',
     status: 'approved'
- }```
+ }``
   
 `/createdriver   POST` To track who own the package based on the last handover
 JSON to send:
-```{
+``{
   "DriverAddress": "10 street Barbue 1204 Morges",
   "Email": "tom.smith@gmail.com",
   "Phone": "0987654321",
@@ -97,7 +97,7 @@ JSON to send:
   "Birthday": "20-10-1990",
   "Firstname": "Tom",
   "Surname": "Smith"
-}```
+}``
 
 `/getDrivers  GET` To facilitate the search of driver who needs to be approved
 
