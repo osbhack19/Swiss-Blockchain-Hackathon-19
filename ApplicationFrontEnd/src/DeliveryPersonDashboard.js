@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
 export default function DeliveryPersonDashboard() {
   const classes = useStyles();
   const [values, setValues] = useState({
-    status: 'staking-pending',
+    status: 'registration-complete',
     currentLocation: 'Trust Square AG, Bahnhofstrasse 3, 8001 Zürich ',
     destination: 'Lüssirainstrasse 4, 6300 Zug',
     showAvailablePackages: false,
@@ -66,7 +66,7 @@ export default function DeliveryPersonDashboard() {
 
     async function fetchData() {
       const res = await axios(
-        'https://ml0x15kkrc.execute-api.us-east-1.amazonaws.com/Prod/driver/searchPackage'
+        'https://r61qa9p3h5.execute-api.us-west-2.amazonaws.com/Prod/searchPackage'
       );
       setValues({ ...values, rows: res.data });
     }

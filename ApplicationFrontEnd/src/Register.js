@@ -81,7 +81,7 @@ let body =
     "Surname": values.lastName
   };
   console.log(body);
-  const res = await fetch('https://ml0x15kkrc.execute-api.us-east-1.amazonaws.com/Prod/driver/createdriver', {
+  const res = await fetch('https://r61qa9p3h5.execute-api.us-west-2.amazonaws.com/Prod/createDriver', {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -91,7 +91,6 @@ let body =
   })
     //axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 
-      //const res = await axios.post('https://ml0x15kkrc.execute-api.us-east-1.amazonaws.com/Prod/driver/createdriver', body);
       console.log(res);
       
 

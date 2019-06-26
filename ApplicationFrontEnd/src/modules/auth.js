@@ -4,10 +4,10 @@ import Amplify, { Auth } from 'aws-amplify';
 Amplify.configure({
   Auth: {
     mandatorySignIn: true,
-    region: 'us-east-1',
-    userPoolId: 'us-east-1_gGTsz6eva',
-    identityPoolId: 'us-east-1:21670a28-ba40-4907-bbaa-195fe8360656',
-    userPoolWebClientId: '2ls7hqamvt11h1dhe2tk9dqc6s'
+    region: 'us-west-2',
+    userPoolId: 'us-west-2_qBh8z8Epc',
+    identityPoolId: 'arn:aws:cognito-idp:us-west-2:343544725688:userpool',
+    userPoolWebClientId: '5k6mnh7ecqv3hirdto8qu2uhga'
   }
 });
 
@@ -24,6 +24,9 @@ export const signUp = async (email, password) => {
   try {
     const newUser = await Auth.signUp({
       username: email,
+      attributes: {
+        email
+      },
       password
     });
     return newUser;
