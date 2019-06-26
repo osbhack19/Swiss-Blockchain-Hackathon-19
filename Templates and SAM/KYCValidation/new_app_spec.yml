@@ -6,25 +6,6 @@ Globals:
     Cors:
       AllowOrigin: '''*'''
 Resources:
-  GetFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: index.get
-      Runtime: nodejs8.10
-      Policies:
-      - SecretsManagerReadWrite
-      - AmazonCognitoPowerUser
-      Environment:
-        Variables:
-          RPC_ENDPOINT: https://rpc.slock.it/goerli
-          COGNITO_POOL_ID: us-east-1_gGTsz6eva
-      Events:
-        GetResource:
-          Type: Api
-          Properties:
-            Path: /kyc/{username}
-            Method: get
-      CodeUri: s3://osb-sbhack-lambda/801178fba89125904f2a7330dac34b13
   PostFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -47,8 +28,6 @@ Resources:
         Variables:
           RPC_ENDPOINT: https://rpc.slock.it/goerli
           CONTRACT_ADDRESS: '0x18b6cdb14A2cEEdc26379BE78B8116a5523c3075'
-          SECRETS_MANAGER_ENDPOINT:
-            Fn::Sub: https://secretsmanager.${AWS::Region}.amazonaws.com
           KYC_VALIDATOR_ADDRESS: '0x09D8018F04de089a535A5a148CDfc28A72e5d439'
           KYC_VALIDATOR_PK: 7656CED238DFCD23014BD10D9F14156167C85679B46FBD9FF353A0C0C1D44EA8
       Events:
@@ -57,4 +36,4 @@ Resources:
           Properties:
             Path: /kyc/{username}/{action}
             Method: POST
-      CodeUri: s3://osb-sbhack-lambda/801178fba89125904f2a7330dac34b13
+      CodeUri: s3://osb-sbhack19-lambda/7477d3751bfa4206b4629fdf86111eb3

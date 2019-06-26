@@ -23,7 +23,7 @@ var contract = new web3.eth.Contract(contractJson.abi, contractAddress);
 
 
 // Load the AWS SDK
-var AWS = require('aws-sdk'),
+/*var AWS = require('aws-sdk'),
     region = "us-east-1",
     secretName = "arn:aws:secretsmanager:us-east-1:225119226438:secret:kycValidator-ywimWV",
 //"kycValidator",
@@ -36,7 +36,7 @@ var client = new AWS.SecretsManager({
 });
 
 var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
-
+*/
 
 //mysql
 var mysql = require('mysql');
@@ -45,7 +45,7 @@ var mysql = require('mysql');
 
 
 
-const getKycValidatorKeys = () => new Promise(function(resolve, reject){
+/*const getKycValidatorKeys = () => new Promise(function(resolve, reject){
     console.log("in getKycValidatorKeys")
     client.getSecretValue({SecretId: secretName}, function(err, data) {
         console.log(data);
@@ -67,9 +67,9 @@ const getKycValidatorKeys = () => new Promise(function(resolve, reject){
     })
 });
 
+*/
 
-
-const isDriverKYC = (dirverAddress) => new Promise(async function(resolve, reject){
+/*const isDriverKYC = (dirverAddress) => new Promise(async function(resolve, reject){
     
     let keys = await getKycValidatorKeys();
     let validatorAddress = keys.KYC_VALIDATOR_ADDRESS;
@@ -111,14 +111,15 @@ const isDriverKYC = (dirverAddress) => new Promise(async function(resolve, rejec
     tran.on('error', reject);
     
 });
+*/
 
-const listUsers = () => new Promise(async function(resolve, reject) {
+/*const listUsers = () => new Promise(async function(resolve, reject) {
     var params = {
-        UserPoolId: process.env.COGNITO_POOL_ID, /* required */
+        UserPoolId: process.env.COGNITO_POOL_ID, 
         AttributesToGet: [
             'email',
             'phone_number'
-            /* more items */
+            
         ]
     };
     cognitoidentityserviceprovider.listUsers(params, function(err, data) {
@@ -128,14 +129,15 @@ const listUsers = () => new Promise(async function(resolve, reject) {
             resolve(data);
     });
 });
+*/
 
 const getUser = async (username) => new Promise(async function(resolve, reject) {
     console.log("on getUser for "+username);
     var con = mysql.createConnection({
-      host: "deliveryenginedb-cluster.cluster-c00vvjlr7gdp.us-east-1.rds.amazonaws.com",
-      user: "sbhack19",
-      password: "sbhack19",
-      database: "Last Miles Delivery",
+      host: "padelylastmiles.cluster-cwfervazs2mu.us-west-2.rds.amazonaws.com",
+      user: "padelyMaster",
+      password: "adminpwd1",
+      database: "padelydb",
       timeout:6000
     });
     var del = con._protocol._delegateError;
@@ -160,10 +162,10 @@ const getUser = async (username) => new Promise(async function(resolve, reject) 
 const updateUserKyc = async (username, isKyc, ethereumAddress, privateKey) => new Promise(async function(resolve, reject) {
     console.log("on getUser for "+username);
     var con = mysql.createConnection({
-      host: "deliveryenginedb-cluster.cluster-c00vvjlr7gdp.us-east-1.rds.amazonaws.com",
-      user: "sbhack19",
-      password: "sbhack19",
-      database: "Last Miles Delivery",
+      host: "padelylastmiles.cluster-cwfervazs2mu.us-west-2.rds.amazonaws.com",
+      user: "padelyMaster",
+      password: "adminpwd1",
+      database: "padelydb",
       timeout:6000
     });
     var del = con._protocol._delegateError;
