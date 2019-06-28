@@ -61,10 +61,15 @@ contract ParcelsNetwork is Ownable, Pausable{
     the equation. This also needs to be evaluated depending on the network the system will be deployed. 
     Probably, a side chain like xDAI is the best option due to the extreme low fees and fastness.
     */
-    uint amountToStake = 730000000000000000;  // ~200CHF in ETH (wei)
+    uint public amountToStake = 30000000000000000;  // ~200CHF in ETH (wei)
 
     constructor() public {
     }
+
+    function setAmountToStake(uint newValue) public onlyOwner {
+        amountToStake = newValue;
+    }
+    
 
     // ---------- Carriers ------------
 
