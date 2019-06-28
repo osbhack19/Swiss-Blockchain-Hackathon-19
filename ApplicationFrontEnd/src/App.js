@@ -1,4 +1,4 @@
-import React from 'react';
+import React,  { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import {
   AppBar,
@@ -17,6 +17,7 @@ import DeliveringPackages from './DeliveringPackages';
 import ForgotPassword from './ForgotPassword';
 import Home from './Home';
 import logo from './logo.png';
+import { currentAuthenticatedBalance, currentAuthenticatedUserEthereumAddress } from './modules/auth';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -26,7 +27,20 @@ const useStyles = makeStyles(theme => ({
 
 export default function App() {
   const classes = useStyles();
-
+  const [values, setValues] = useState({
+    balance: null
+  });
+  
+  
+  useEffect(() => {
+    async function fetchData() {
+      //let balance = (await currentAuthenticatedBalance())/1000000000000000000;
+      //let ethereumAddress = await currentAuthenticatedUserEthereumAddress();
+      //setValues({ ...values, balance, ethereumAddress });
+    }
+    fetchData();
+  });
+    
   return (
     <Router>
       <CssBaseline />
@@ -36,6 +50,9 @@ export default function App() {
           <Typography variant="h6" color="inherit" className={classes.title}>
             padely
           </Typography>
+          {/*values.balance !== null && (
+            <Typography variant="body1">{values.ethereumAddress} ({values.balance}) ETH</Typography>
+          )*/}
           {/* <Typography variant="body1">Andrew Golightly (CHF 33.83)</Typography> */}
         </Toolbar>
       </AppBar>

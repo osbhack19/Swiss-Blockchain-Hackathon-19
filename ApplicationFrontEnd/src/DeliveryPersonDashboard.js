@@ -1,3 +1,5 @@
+/*global fetch*/
+
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import {
@@ -19,6 +21,8 @@ import axios from 'axios';
 import GoogleMapReact from 'google-map-react';
 import { makeStyles } from '@material-ui/core/styles';
 import stakeImage from './Stake_Escrow.png';
+import { currentAuthenticatedUserEthereumAddress, currentAuthenticatedIsKyc, currentAuthenticatedBalance } from './modules/auth';
+
 
 const useStyles = makeStyles(theme => ({
   inputField: {
@@ -43,7 +47,7 @@ const useStyles = makeStyles(theme => ({
 export default function DeliveryPersonDashboard() {
   const classes = useStyles();
   const [values, setValues] = useState({
-    status: 'registration-complete',
+    status: 'kyc-pending',
     currentLocation: 'Trust Square AG, Bahnhofstrasse 3, 8001 Zürich ',
     destination: 'Lüssirainstrasse 4, 6300 Zug',
     showAvailablePackages: false,
@@ -62,6 +66,8 @@ export default function DeliveryPersonDashboard() {
         lat: position.coords.latitude,
         lng: position.coords.longitude
       });
+      
+      
     });
 
     async function fetchData() {
@@ -69,6 +75,23 @@ export default function DeliveryPersonDashboard() {
         'https://r61qa9p3h5.execute-api.us-west-2.amazonaws.com/Prod/searchPackage'
       );
       setValues({ ...values, rows: res.data });
+      
+      let ethereumAddress = await currentAuthenticatedUserEthereumAddress();
+      let isKyc= await currentAuthenticatedIsKyc();
+      let status = "kyc-pending";
+      if(isKyc) {
+        // check balance
+        //let balance = await currentAuthenticatedBalance();
+        /*debugger;
+        if(balance >= 30000000000000000 ) {
+          status = "registration-complete";
+        } else {
+          status = "staking-pending";
+        }*/
+        
+        status = "registration-complete";
+      }
+      setValues({ ...values, status,  rows: res.data, ethereumAddress, isKyc });
     }
     fetchData();
   }, []);
@@ -126,7 +149,7 @@ export default function DeliveryPersonDashboard() {
             You have two options:{' '}
             <ol>
               <li>
-                Send Ethereum to 0xd18fAF8A39772C9DF0b397f403F2a1A301B65a8d
+                Send <b>0.03 ETH</b> to <b> {values.ethereumAddress}</b>
               </li>
               <li>Do a bank transfer to the padely bank account (5% fee)</li>
             </ol>
@@ -269,13 +292,14 @@ export default function DeliveryPersonDashboard() {
                       </Typography>
                     </Grid>
                     <Grid item xs={6}>
+                      {/*
                       <Typography
                         className={classes.inputField}
                         variant="subtitle2"
                         gutterBottom
                       >
                         Total earnings: CHF {values.summary.earnings}
-                      </Typography>
+                      </Typography>*/}
                     </Grid>
                   </Grid>
                 </Paper>
@@ -284,9 +308,20 @@ export default function DeliveryPersonDashboard() {
                   className={classes.inputField}
                   variant="contained"
                   color="primary"
-                  onClick={() =>
-                    setValues({ ...values, confirmedPackages: true })
-                  }
+                  onClick={async () => {
+                    console.log("EthereumAddress: "+values.ethereumAddress);
+                    
+                    fetch(`https://31f8qvry68.execute-api.us-west-2.amazonaws.com/Prod/registerParcel/1/${values.ethereumAddress}`, {
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({}),
+                      mode: 'cors',
+                      method: "POST"
+                    })
+                    setValues({ ...values, confirmedPackages: true });
+
+                  }}
                 >
                   Confirm Packages For Pickup
                 </Button>

@@ -60,7 +60,7 @@ export default function DeliveryPersonDashboard() {
         rows.push({
           name: entry.Firstname+" "+entry.Surname,
           city: '', 
-          status: entry.IS_KYC===1 ? "approved" : "",
+          status: entry.IS_KYC===1 ? "Approved" : "",
           data: entry
         })
       }
@@ -88,7 +88,7 @@ export default function DeliveryPersonDashboard() {
       setValues({ ...values, showDialog: false });
       
       // 
-      const res = await fetch(` https://qjrlv5ju6j.execute-api.us-west-2.amazonaws.com/Prod/kyc/${username}/approve`, {
+      const res = await fetch(`https://31f8qvry68.execute-api.us-west-2.amazonaws.com/Prod/kyc/${username}/approve`, {
         headers: {
           'Content-Type': 'application/json',
         },

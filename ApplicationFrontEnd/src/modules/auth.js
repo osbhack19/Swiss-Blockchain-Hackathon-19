@@ -1,5 +1,7 @@
 // useful https://serverless-stack.com/chapters/signup-with-aws-cognito.html
 import Amplify, { Auth } from 'aws-amplify';
+import axios from 'axios';
+import Web3 from 'web3';
 
 Amplify.configure({
   Auth: {
@@ -52,3 +54,84 @@ export const currentAuthenticatedUser = async () => {
     throw e;
   } 
 };
+
+export const currentAuthenticatedUserEthereumAddress = async () => {
+  try {
+    
+    let user = await currentAuthenticatedUser();
+    let username = user.username
+    
+    const drivers = await axios('https://r61qa9p3h5.execute-api.us-west-2.amazonaws.com/Prod/getDrivers');
+    let ethereumAddress = ''
+    
+    for(let i = 0; i <drivers.data.length; i++ ) {
+      let entry = drivers.data[i];
+      console.log(entry);
+      if(entry.username === username) {
+        ethereumAddress = entry.EthereumAddress;
+        console.log({ethereumAddress})
+        return ethereumAddress;
+      }
+    }
+    
+    
+  } catch (e) {
+    throw e;
+  } 
+};
+
+export const currentAuthenticatedIsKyc = async () => {
+  try {
+    
+    let user = await currentAuthenticatedUser();
+    let username = user.username
+    
+    const drivers = await axios('https://r61qa9p3h5.execute-api.us-west-2.amazonaws.com/Prod/getDrivers');
+
+    for(let i = 0; i <drivers.data.length; i++ ) {
+      let entry = drivers.data[i];
+      console.log(entry);
+      if(entry.username === username) {
+        console.log({entry});
+        
+        return entry.IS_KYC === 1;
+      }
+    }
+  } catch (e) {
+    throw e;
+  } 
+};
+
+
+export const currentAuthenticatedBalance = async () => {
+  try {
+    
+    let user = await currentAuthenticatedUser();
+    let username = user.username
+    
+    const drivers = await axios('https://r61qa9p3h5.execute-api.us-west-2.amazonaws.com/Prod/getDrivers');
+
+    for(let i = 0; i <drivers.data.length; i++ ) {
+      let entry = drivers.data[i];
+      console.log(entry);
+     if(entry.username === username) {
+        let ethereumAddress = entry.EthereumAddress;
+        if(ethereumAddress !== '') {
+          console.log({ethereumAddress})
+          const web3 = new Web3('https://rpc.slock.it/goerli');
+          
+          let balance = await web3.eth.getBalance(ethereumAddress);
+          debugger;
+          return balance;
+        }
+      }
+      return 0;
+    }
+  } catch (e) {
+    throw e;
+  } 
+};
+
+
+
+
