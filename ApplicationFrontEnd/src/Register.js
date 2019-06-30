@@ -1,5 +1,5 @@
 /*global fetch*/
-import React from 'react';
+import React, {useContext} from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -10,7 +10,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { signUp, verifyEmailAddress, currentAuthenticatedUser } from './modules/auth';
 import logo from './padely-logo.png';
-import axios from 'axios';
+
+import {fetchUserProfile} from './modules/UserProfile';
+
+import { GlobalContext} from './store/GlobalContext';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -48,6 +51,10 @@ export default function SignUp() {
     verifiedEmailAddress: false
   });
 
+  const { state, dispatch } = useContext(GlobalContext);
+
+  
+  console.log({state});
   const attemptSignUp = async e => {
     e.preventDefault();
 
@@ -58,17 +65,7 @@ export default function SignUp() {
       //let user = await currentAuthenticatedUser();
       //console.log({user});
       console.log(values);
-      /*dob: "1987-12-12"
-emailAddress: "joao.aguiam@gmail.com"
-firstName: "asd"
-lastName: "asd"
-password: "JAguiam.87"
-phone: "123123123"
-postalId: "asd"
-streetAddress: "asd"
-streetNumber: "asd"
-verificationScreen: false
-verifiedEmailAddress: false*/
+
 let body =
   {
     "username": values.emailAddress,
@@ -94,6 +91,7 @@ let body =
       console.log(res);
       
 
+      fetchUserProfile(values.emailAddress, dispatch);
 
       setValues({ ...values, verificationScreen: true });
     } catch (e) {
@@ -106,6 +104,8 @@ let body =
 
     try {
       await verifyEmailAddress(values.emailAddress, values.verificationCode);
+      
+      fetchUserProfile(values.emailAddress, dispatch);
 
       setValues({ ...values, verifiedEmailAddress: true });
     } catch (e) {
@@ -324,6 +324,7 @@ let body =
         <Typography component="h1" variant="h5">
           Registration
         </Typography>
+        
         {renderForm()}
       </div>
     </Container>

@@ -1,6 +1,6 @@
 /*global fetch*/
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 import {
   Typography,
@@ -22,7 +22,8 @@ import GoogleMapReact from 'google-map-react';
 import { makeStyles } from '@material-ui/core/styles';
 import stakeImage from './Stake_Escrow.png';
 import { currentAuthenticatedUserEthereumAddress, currentAuthenticatedIsKyc, currentAuthenticatedBalance } from './modules/auth';
-
+import { GlobalContext} from './store/GlobalContext';
+import {userStatus} from './store/UserProfileReducer'
 
 const useStyles = makeStyles(theme => ({
   inputField: {
@@ -60,6 +61,10 @@ export default function DeliveryPersonDashboard() {
   });
   const [center, setCenter] = useState({});
 
+    
+  const { state, dispatch } = useContext(GlobalContext);
+
+
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(position => {
       setCenter({
@@ -76,22 +81,8 @@ export default function DeliveryPersonDashboard() {
       );
       setValues({ ...values, rows: res.data });
       
-      let ethereumAddress = await currentAuthenticatedUserEthereumAddress();
-      let isKyc= await currentAuthenticatedIsKyc();
-      let status = "kyc-pending";
-      if(isKyc) {
-        // check balance
-        //let balance = await currentAuthenticatedBalance();
-        /*debugger;
-        if(balance >= 30000000000000000 ) {
-          status = "registration-complete";
-        } else {
-          status = "staking-pending";
-        }*/
-        
-        status = "registration-complete";
-      }
-      setValues({ ...values, status,  rows: res.data, ethereumAddress, isKyc });
+      
+      setValues({ ...values,  rows: res.data, });
     }
     fetchData();
   }, []);
@@ -113,7 +104,7 @@ export default function DeliveryPersonDashboard() {
 
     if (values.confirmedPackages) {
       dashboard = <Redirect to="package-pickup" />;
-    } else if (values.status === 'kyc-pending') {
+    } else if (state.userProfile.status === userStatus.KYC_PENDING) {
       dashboard = (
         <Container className={classes.root}>
           <Typography variant="h5" gutterBottom>
@@ -124,7 +115,7 @@ export default function DeliveryPersonDashboard() {
           </Typography>
         </Container>
       );
-    } else if (values.status === 'staking-pending') {
+    } else if (state.userProfile.status === userStatus.STAKE_PENDING) {
       dashboard = (
         <Container className={classes.root}>
           <Typography variant="h5" gutterBottom>
@@ -149,7 +140,7 @@ export default function DeliveryPersonDashboard() {
             You have two options:{' '}
             <ol>
               <li>
-                Send <b>0.03 ETH</b> to <b> {values.ethereumAddress}</b>
+                Send <b>0.03 ETH</b> to <b> {state.userProfile.ethereumAddress}</b>
               </li>
               <li>Do a bank transfer to the padely bank account (5% fee)</li>
             </ol>
@@ -173,7 +164,7 @@ export default function DeliveryPersonDashboard() {
           />
         </Container>
       );
-    } else if (values.status === 'registration-complete') {
+    } else if (state.userProfile.status === userStatus.REGISTRATION_COMPLETE) {
       dashboard = (
         <Grid container className={classes.root} spacing={2}>
           <Grid item xs={12} sm={6}>
