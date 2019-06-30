@@ -235,26 +235,52 @@ const setDriverKYC = (driverAddress) => new Promise(async function(resolve, reje
     
 });
 
-exports.get = async (event, context, callback) => {
+const registerParcel = (parcelId, driverAddress) => new Promise(async function(resolve, reject){
+    console.log("on setDriverKYC");
+    let carrierAddress = process.env.CARRIER_ADDRESS;
+    let carrierPk = process.env.CARRIER_PK;
     
- 
-    let username = event.pathParameters.username;
+    var registerParcelMethod = contract.methods.registerParcel(parcelId, driverAddress);
+    var encodedABI = registerParcelMethod.encodeABI();
+    console.log("getting transactionCount");
+
+    const transactionCount = await web3.eth.getTransactionCount(carrierAddress, 'pending');
+    console.log({transactionCount});
+
+    var tx = {
+        nonce: transactionCount,
+        from: carrierAddress,
+        to: contractAddress,
+        value: 5000000000000000, // 0.005
+        gas: 2000000,
+        data: encodedABI
+    };
+
+    console.log("it will connect to the blockchain");
+
+    const signed = await web3.eth.accounts.signTransaction(tx, carrierPk);
+    console.log({signed});
+    var tran = web3.eth.sendSignedTransaction(signed.rawTransaction);
     
+    tran.on('confirmation', (confirmationNumber, receipt) => {
+        console.log('confirmation: ' + confirmationNumber);
+        resolve({confirmationNumber, receipt});
+    });
+
+    tran.on('transactionHash', hash => {
+        console.log('hash');
+        console.log(hash);
+    });
+
+    tran.on('receipt', receipt => {
+        console.log('reciept');
+        console.log(receipt);
+    });
+
+    tran.on('error', reject);
     
-    
-   
-    var response;
-    response = createResponse(200, JSON.stringify({username, user}));
-    
-    
-        /*if (err)
-            response = createResponse(500, err);
-        else
-            */
-    callback(null, response);
-};
-   
-    
+});
+
 exports.post = async (event, context, callback) => {
     console.log(event);
     /*let keys = await getKycValidatorKeys();
@@ -306,6 +332,29 @@ exports.post = async (event, context, callback) => {
         else
             */
             
+    context.callbackWaitsForEmptyEventLoop = false;
+    callback(null,response);
+};
+
+
+exports.registerParcel = async (event, context, callback) => {
+    console.log(event);
+    
+    let parcelId = event.pathParameters.parcelId;
+    let driverAddress = event.pathParameters.driverAddress;
+    
+    console.log("on registerParcel");
+    console.log({parcelId, driverAddress});
+
+    console.log("will call smart contract");
+    const res = await registerParcel(parcelId, driverAddress);
+    console.log("SmartContract called...");
+    console.log({res});
+    
+    var response;
+
+    response = createResponse(200, JSON.stringify({}));
+      
     context.callbackWaitsForEmptyEventLoop = false;
     callback(null,response);
 };

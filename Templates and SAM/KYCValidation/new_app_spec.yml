@@ -3,7 +3,10 @@ Transform: AWS::Serverless-2016-10-31
 Description: KYC API that interacts with the SmartContract
 Globals:
   Api:
+    EndpointConfiguration: EDGE
     Cors:
+      AllowMethods: '''DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT'''
+      AllowHeaders: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'''
       AllowOrigin: '''*'''
 Resources:
   PostFunction:
@@ -27,7 +30,7 @@ Resources:
       Environment:
         Variables:
           RPC_ENDPOINT: https://rpc.slock.it/goerli
-          CONTRACT_ADDRESS: '0x18b6cdb14A2cEEdc26379BE78B8116a5523c3075'
+          CONTRACT_ADDRESS: '0x42F94b533A04A578AA88F8a5ab44d44583274b8E'
           KYC_VALIDATOR_ADDRESS: '0x09D8018F04de089a535A5a148CDfc28A72e5d439'
           KYC_VALIDATOR_PK: 7656CED238DFCD23014BD10D9F14156167C85679B46FBD9FF353A0C0C1D44EA8
       Events:
@@ -36,4 +39,35 @@ Resources:
           Properties:
             Path: /kyc/{username}/{action}
             Method: POST
-      CodeUri: s3://osb-sbhack19-lambda/7477d3751bfa4206b4629fdf86111eb3
+      CodeUri: s3://osb-sbhack19-lambda/a8aa0589e2fb9bc9f5da0a7e43772ed4
+  RegisterParcelFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.registerParcel
+      Runtime: nodejs8.10
+      Policies:
+      - SecretsManagerReadWrite
+      - Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Action:
+          - ec2:DescribeNetworkInterfaces
+          - ec2:CreateNetworkInterface
+          - ec2:DeleteNetworkInterface
+          - ec2:DescribeInstances
+          - ec2:AttachNetworkInterface
+          Resource: '*'
+      Timeout: 30
+      Environment:
+        Variables:
+          RPC_ENDPOINT: https://rpc.slock.it/goerli
+          CONTRACT_ADDRESS: '0x42F94b533A04A578AA88F8a5ab44d44583274b8E'
+          CARRIER_ADDRESS: '0x9180CDfA406f81913943341aF74e0E68EC0fF72b'
+          CARRIER_PK: AFDA0C31162AE042ABBF27B1B9A84A66051880B8D2029215558C2CD957424A41
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: /registerParcel/{parcelId}/{driverAddress}
+            Method: POST
+      CodeUri: s3://osb-sbhack19-lambda/a8aa0589e2fb9bc9f5da0a7e43772ed4

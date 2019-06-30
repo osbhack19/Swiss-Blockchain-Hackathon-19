@@ -47,14 +47,12 @@ Resources:
           KYC_VALIDATOR_PK: "7656CED238DFCD23014BD10D9F14156167C85679B46FBD9FF353A0C0C1D44EA8"
       VpcConfig:
         SubnetIds:
-          - subnet-280a9116
-          - subnet-95b2e2c9
-          - subnet-e32dcaae
-          - subnet-a75c0bc0
-          - subnet-4f80d261
-          - subnet-c13039ce
+          - subnet-00f71a1ca9c698edb
+          - subnet-07571fd5a504d5c63
+          - subnet-0b4b6f612722900a5
+          - subnet-0e436e36e44dd55fc
         SecurityGroupIds:
-          - sg-02313b3da52b71ddf
+          - sg-0284f129c59184bfc
       Events:
         GetResource:
           Type: Api
