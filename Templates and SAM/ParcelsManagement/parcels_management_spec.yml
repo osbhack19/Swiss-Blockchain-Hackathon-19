@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: API to manage parcels
+Globals:
+  Api:
+    EndpointConfiguration: EDGE
+    Cors:
+      AllowMethods: '''DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT'''
+      AllowHeaders: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'''
+      AllowOrigin: '''*'''
+Resources:
+  AddParcel:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.addParcel
+      Runtime: nodejs8.10
+      Policies:
+      - SecretsManagerReadWrite
+      - Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Action:
+          - ec2:DescribeNetworkInterfaces
+          - ec2:CreateNetworkInterface
+          - ec2:DeleteNetworkInterface
+          - ec2:DescribeInstances
+          - ec2:AttachNetworkInterface
+          Resource: '*'
+      Timeout: 30
+      Environment:
+        Variables:
+          MYSQL_ENDPOINT: padelylastmiles.cluster-cwfervazs2mu.us-west-2.rds.amazonaws.com
+          MYSQL_USER: padelyMaster
+          MYSQL_PASSWORD: adminpwd1
+          MYSQL_DATABASE: padelydb
+          MYSQL_TIMEOUT: 6000
+          RPC_ENDPOINT: https://rpc.slock.it/goerli
+          CONTRACT_ADDRESS: '0x42F94b533A04A578AA88F8a5ab44d44583274b8E'
+          KYC_VALIDATOR_ADDRESS: '0x09D8018F04de089a535A5a148CDfc28A72e5d439'
+          KYC_VALIDATOR_PK: 7656CED238DFCD23014BD10D9F14156167C85679B46FBD9FF353A0C0C1D44EA8
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: /parcel/add
+            Method: POST
+      CodeUri: s3://osb-sbhack19-lambda/494741db3cefcad6f7a95e320177114f

@@ -1,0 +1,22 @@
+{
+  "name": "osb-kycapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git-codecommit.us-east-2.amazonaws.com/v1/repos/osb-kycapi"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.5.5",
+    "mysql": "^2.17.1",
+    "node-fetch": "^2.6.0",
+    "uuid": "^3.3.2",
+    "web3": "^1.0.0-beta.55"
+  }
+}
