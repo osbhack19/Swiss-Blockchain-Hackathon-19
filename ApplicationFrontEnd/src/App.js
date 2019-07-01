@@ -24,7 +24,7 @@ import { initialUserProfileState, userProfileReducer } from './store/UserProfile
 import { GlobalContext } from './store/GlobalContext';
 
 import useCombinedReducers from 'use-combined-reducers';
-
+import AddParcel from './AddParcel';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -85,6 +85,8 @@ export default function App() {
             component={DeliveryPersonDashboard}
           />
           <Route path="/forgot-password/" component={ForgotPassword} />
+          <Route path="/add-parcel/" component={AddParcel} />
+
         </Container>
       </Router>
     </GlobalContext.Provider>

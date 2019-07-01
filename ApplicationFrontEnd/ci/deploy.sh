@@ -1,4 +1,4 @@
 #!/bin/bash
-npm run start;
+npm run build;
 aws s3 sync build/ s3://padely.ch --acl public-read
 
