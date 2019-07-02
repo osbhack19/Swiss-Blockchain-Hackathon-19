@@ -1,5 +1,5 @@
 /*global fetch*/
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -20,6 +20,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
+import Web3 from 'web3';
+
+const CARRIER_ADDRESS = "0x9180CDfA406f81913943341aF74e0E68EC0fF72b";
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -53,8 +56,7 @@ const useStyles = makeStyles(theme => ({
 export default function AddParcel() {
   const classes = useStyles();
   const [values, setValues] = React.useState({
-    verificationScreen: false,
-    verifiedEmailAddress: false
+    carrierBalance: 0
   });
   
   const [open, setOpen] = React.useState(false);
@@ -67,7 +69,15 @@ export default function AddParcel() {
     setOpen(false);
   }
 
-
+  useEffect(() => {
+      async function fetchData() {
+        const web3 = new Web3('https://rpc.slock.it/goerli');
+        
+        let balance = await web3.eth.getBalance(CARRIER_ADDRESS);
+        setValues({ ...values, carrierBalance: balance/1000000000000000000});
+    }
+    fetchData();
+  }, []);
 
   const { state, dispatch } = useContext(GlobalContext);
 
@@ -211,6 +221,9 @@ export default function AddParcel() {
             >
               Submit
             </Button>
+            <Typography variant="caption" display="block" gutterBottom>
+              Carrier Balance: {values.carrierBalance} CHF
+            </Typography>
           </form>
         </div>
     </Container>
