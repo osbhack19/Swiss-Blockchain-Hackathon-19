@@ -52,7 +52,7 @@ export default function DeliveryPersonDashboard() {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await axios('https://ml0x15kkrc.execute-api.us-east-1.amazonaws.com/Prod/driver/getDrivers');
+      const res = await axios('https://r61qa9p3h5.execute-api.us-west-2.amazonaws.com/Prod/getDrivers');
 
       let rows = [];
       for(let i = 0; i <res.data.length; i++ ) {
@@ -60,7 +60,7 @@ export default function DeliveryPersonDashboard() {
         rows.push({
           name: entry.Firstname+" "+entry.Surname,
           city: '', 
-          status: entry.IS_KYC===1 ? "approved" : "",
+          status: entry.IS_KYC===1 ? "Approved" : "",
           data: entry
         })
       }
@@ -88,7 +88,7 @@ export default function DeliveryPersonDashboard() {
       setValues({ ...values, showDialog: false });
       
       // 
-      const res = await fetch(`https://e83xdtqace.execute-api.us-east-1.amazonaws.com/Prod/kyc/${username}/approve`, {
+      const res = await fetch(`https://31f8qvry68.execute-api.us-west-2.amazonaws.com/Prod/kyc/${username}/approve`, {
         headers: {
           'Content-Type': 'application/json',
         },

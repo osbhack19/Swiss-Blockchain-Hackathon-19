@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Button from '@material-ui/core/Button';
 import { Link, Redirect } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -11,6 +11,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import logo from './padely-logo.png';
 import { login } from './modules/auth';
+import {fetchUserProfile} from './modules/UserProfile';
+
+import { GlobalContext} from './store/GlobalContext';
+
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -40,12 +44,16 @@ export default function SignIn() {
   const classes = useStyles();
   const [values, setValues] = React.useState({ loggedIn: false });
 
+  const { state, dispatch } = useContext(GlobalContext);
+
+
   const attemptLogin = async e => {
     e.preventDefault();
 
     try {
       const res = await login(values.email, values.password);
       console.log(res);
+      fetchUserProfile(values.email, dispatch);
       setValues({ ...values, loggedIn: true });
     } catch (e) {
       console.log('Error with logging in', e);

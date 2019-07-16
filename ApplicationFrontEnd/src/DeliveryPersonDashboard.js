@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+/*global fetch*/
+
+import React, { useState, useEffect, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 import {
   Typography,
@@ -19,6 +21,9 @@ import axios from 'axios';
 import GoogleMapReact from 'google-map-react';
 import { makeStyles } from '@material-ui/core/styles';
 import stakeImage from './Stake_Escrow.png';
+import { currentAuthenticatedUserEthereumAddress, currentAuthenticatedIsKyc, currentAuthenticatedBalance } from './modules/auth';
+import { GlobalContext} from './store/GlobalContext';
+import {userStatus} from './store/UserProfileReducer'
 
 const useStyles = makeStyles(theme => ({
   inputField: {
@@ -43,7 +48,7 @@ const useStyles = makeStyles(theme => ({
 export default function DeliveryPersonDashboard() {
   const classes = useStyles();
   const [values, setValues] = useState({
-    status: 'staking-pending',
+    status: 'kyc-pending',
     currentLocation: 'Trust Square AG, Bahnhofstrasse 3, 8001 Zürich ',
     destination: 'Lüssirainstrasse 4, 6300 Zug',
     showAvailablePackages: false,
@@ -56,19 +61,28 @@ export default function DeliveryPersonDashboard() {
   });
   const [center, setCenter] = useState({});
 
+    
+  const { state, dispatch } = useContext(GlobalContext);
+
+
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(position => {
       setCenter({
         lat: position.coords.latitude,
         lng: position.coords.longitude
       });
+      
+      
     });
 
     async function fetchData() {
       const res = await axios(
-        'https://ml0x15kkrc.execute-api.us-east-1.amazonaws.com/Prod/driver/searchPackage'
+        'https://r61qa9p3h5.execute-api.us-west-2.amazonaws.com/Prod/searchPackage'
       );
       setValues({ ...values, rows: res.data });
+      
+      
+      setValues({ ...values,  rows: res.data, });
     }
     fetchData();
   }, []);
@@ -90,7 +104,7 @@ export default function DeliveryPersonDashboard() {
 
     if (values.confirmedPackages) {
       dashboard = <Redirect to="package-pickup" />;
-    } else if (values.status === 'kyc-pending') {
+    } else if (state.userProfile.status === userStatus.KYC_PENDING) {
       dashboard = (
         <Container className={classes.root}>
           <Typography variant="h5" gutterBottom>
@@ -101,7 +115,7 @@ export default function DeliveryPersonDashboard() {
           </Typography>
         </Container>
       );
-    } else if (values.status === 'staking-pending') {
+    } else if (state.userProfile.status === userStatus.STAKE_PENDING) {
       dashboard = (
         <Container className={classes.root}>
           <Typography variant="h5" gutterBottom>
@@ -126,7 +140,7 @@ export default function DeliveryPersonDashboard() {
             You have two options:{' '}
             <ol>
               <li>
-                Send Ethereum to 0xd18fAF8A39772C9DF0b397f403F2a1A301B65a8d
+                Send <b>0.03 ETH</b> to <b> {state.userProfile.ethereumAddress}</b>
               </li>
               <li>Do a bank transfer to the padely bank account (5% fee)</li>
             </ol>
@@ -150,7 +164,7 @@ export default function DeliveryPersonDashboard() {
           />
         </Container>
       );
-    } else if (values.status === 'registration-complete') {
+    } else if (state.userProfile.status === userStatus.REGISTRATION_COMPLETE) {
       dashboard = (
         <Grid container className={classes.root} spacing={2}>
           <Grid item xs={12} sm={6}>
@@ -269,13 +283,14 @@ export default function DeliveryPersonDashboard() {
                       </Typography>
                     </Grid>
                     <Grid item xs={6}>
+                      {/*
                       <Typography
                         className={classes.inputField}
                         variant="subtitle2"
                         gutterBottom
                       >
                         Total earnings: CHF {values.summary.earnings}
-                      </Typography>
+                      </Typography>*/}
                     </Grid>
                   </Grid>
                 </Paper>
@@ -284,9 +299,20 @@ export default function DeliveryPersonDashboard() {
                   className={classes.inputField}
                   variant="contained"
                   color="primary"
-                  onClick={() =>
-                    setValues({ ...values, confirmedPackages: true })
-                  }
+                  onClick={async () => {
+                    console.log("EthereumAddress: "+values.ethereumAddress);
+                    
+                    fetch(`https://31f8qvry68.execute-api.us-west-2.amazonaws.com/Prod/registerParcel/1/${values.ethereumAddress}`, {
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({}),
+                      mode: 'cors',
+                      method: "POST"
+                    })
+                    setValues({ ...values, confirmedPackages: true });
+
+                  }}
                 >
                   Confirm Packages For Pickup
                 </Button>

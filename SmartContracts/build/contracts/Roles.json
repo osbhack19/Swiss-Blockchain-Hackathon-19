@@ -1,6 +1,7 @@
 {
   "contractName": "Roles",
   "abi": [],
+<<<<<<< HEAD
   "metadata": "{\"compiler\":{\"version\":\"0.5.8+commit.23d335f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"details\":\"Library for managing addresses assigned to a Role.\",\"methods\":{},\"title\":\"Roles\"},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/D/Cloud Sync/OneDrive - One Step Beyond SA/Dev/sbhack/Swiss-Blockchain-Hackathon-19/SmartContracts/node_modules/openzeppelin-solidity/contracts/access/Roles.sol\":\"Roles\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/D/Cloud Sync/OneDrive - One Step Beyond SA/Dev/sbhack/Swiss-Blockchain-Hackathon-19/SmartContracts/node_modules/openzeppelin-solidity/contracts/access/Roles.sol\":{\"keccak256\":\"0xb002c378d7b82a101bd659c341518953ca0919d342c0a400196982c0e7e7bcdb\",\"urls\":[\"bzzr://bd34c1ce05b5b2b3a62fc02e160f6805b1cadd476854664f433c685b2fda8dad\"]}},\"version\":1}",
   "bytecode": "0x604c6023600b82828239805160001a607314601657fe5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea165627a7a72305820c498521c68972f674bc2e21877b865c3e67725fa85de96e24d55c602a2bc37110029",
   "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea165627a7a72305820c498521c68972f674bc2e21877b865c3e67725fa85de96e24d55c602a2bc37110029",
@@ -10,6 +11,17 @@
   "sourcePath": "D:\\Cloud Sync\\OneDrive - One Step Beyond SA\\Dev\\sbhack\\Swiss-Blockchain-Hackathon-19\\SmartContracts\\node_modules\\openzeppelin-solidity\\contracts\\access\\Roles.sol",
   "ast": {
     "absolutePath": "/D/Cloud Sync/OneDrive - One Step Beyond SA/Dev/sbhack/Swiss-Blockchain-Hackathon-19/SmartContracts/node_modules/openzeppelin-solidity/contracts/access/Roles.sol",
+=======
+  "metadata": "{\"compiler\":{\"version\":\"0.5.8+commit.23d335f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"details\":\"Library for managing addresses assigned to a Role.\",\"methods\":{},\"title\":\"Roles\"},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/ec2-user/environment/Swiss-Blockchain-Hackathon-19/SmartContracts/node_modules/openzeppelin-solidity/contracts/access/Roles.sol\":\"Roles\"},\"evmVersion\":\"petersburg\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/ec2-user/environment/Swiss-Blockchain-Hackathon-19/SmartContracts/node_modules/openzeppelin-solidity/contracts/access/Roles.sol\":{\"keccak256\":\"0xb002c378d7b82a101bd659c341518953ca0919d342c0a400196982c0e7e7bcdb\",\"urls\":[\"bzzr://bd34c1ce05b5b2b3a62fc02e160f6805b1cadd476854664f433c685b2fda8dad\"]}},\"version\":1}",
+  "bytecode": "0x604c6023600b82828239805160001a607314601657fe5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea165627a7a7230582005b5bf45fc7c4a6db4262b20d1405cfcad9398aee49cc9de4d07866f4de810920029",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea165627a7a7230582005b5bf45fc7c4a6db4262b20d1405cfcad9398aee49cc9de4d07866f4de810920029",
+  "sourceMap": "108:873:2:-;;132:2:-1;166:7;155:9;146:7;137:37;255:7;249:14;246:1;241:23;235:4;232:33;222:2;;269:9;222:2;293:9;290:1;283:20;323:4;314:7;306:22;347:7;338;331:24",
+  "deployedSourceMap": "108:873:2:-;;;;;;;;",
+  "source": "pragma solidity ^0.5.0;\n\n/**\n * @title Roles\n * @dev Library for managing addresses assigned to a Role.\n */\nlibrary Roles {\n    struct Role {\n        mapping (address => bool) bearer;\n    }\n\n    /**\n     * @dev Give an account access to this role.\n     */\n    function add(Role storage role, address account) internal {\n        require(!has(role, account), \"Roles: account already has role\");\n        role.bearer[account] = true;\n    }\n\n    /**\n     * @dev Remove an account's access to this role.\n     */\n    function remove(Role storage role, address account) internal {\n        require(has(role, account), \"Roles: account does not have role\");\n        role.bearer[account] = false;\n    }\n\n    /**\n     * @dev Check if an account has this role.\n     * @return bool\n     */\n    function has(Role storage role, address account) internal view returns (bool) {\n        require(account != address(0), \"Roles: account is the zero address\");\n        return role.bearer[account];\n    }\n}\n",
+  "sourcePath": "/home/ec2-user/environment/Swiss-Blockchain-Hackathon-19/SmartContracts/node_modules/openzeppelin-solidity/contracts/access/Roles.sol",
+  "ast": {
+    "absolutePath": "/home/ec2-user/environment/Swiss-Blockchain-Hackathon-19/SmartContracts/node_modules/openzeppelin-solidity/contracts/access/Roles.sol",
+>>>>>>> d32a4636fcb7cb0d54ebdf57e745a77060343b0e
     "exportedSymbols": {
       "Roles": [
         522
@@ -1084,7 +1096,11 @@
     "src": "0:982:2"
   },
   "legacyAST": {
+<<<<<<< HEAD
     "absolutePath": "/D/Cloud Sync/OneDrive - One Step Beyond SA/Dev/sbhack/Swiss-Blockchain-Hackathon-19/SmartContracts/node_modules/openzeppelin-solidity/contracts/access/Roles.sol",
+=======
+    "absolutePath": "/home/ec2-user/environment/Swiss-Blockchain-Hackathon-19/SmartContracts/node_modules/openzeppelin-solidity/contracts/access/Roles.sol",
+>>>>>>> d32a4636fcb7cb0d54ebdf57e745a77060343b0e
     "exportedSymbols": {
       "Roles": [
         522
@@ -2164,7 +2180,11 @@
   },
   "networks": {},
   "schemaVersion": "3.0.11",
+<<<<<<< HEAD
   "updatedAt": "2019-06-28T11:20:16.723Z",
+=======
+  "updatedAt": "2019-06-28T11:27:27.114Z",
+>>>>>>> d32a4636fcb7cb0d54ebdf57e745a77060343b0e
   "devdoc": {
     "details": "Library for managing addresses assigned to a Role.",
     "methods": {},

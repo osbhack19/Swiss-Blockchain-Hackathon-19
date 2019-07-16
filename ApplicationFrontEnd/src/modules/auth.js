@@ -1,13 +1,15 @@
 // useful https://serverless-stack.com/chapters/signup-with-aws-cognito.html
 import Amplify, { Auth } from 'aws-amplify';
+import axios from 'axios';
+import Web3 from 'web3';
 
 Amplify.configure({
   Auth: {
     mandatorySignIn: true,
-    region: 'us-east-1',
-    userPoolId: 'us-east-1_gGTsz6eva',
-    identityPoolId: 'us-east-1:21670a28-ba40-4907-bbaa-195fe8360656',
-    userPoolWebClientId: '2ls7hqamvt11h1dhe2tk9dqc6s'
+    region: 'us-west-2',
+    userPoolId: 'us-west-2_qBh8z8Epc',
+    identityPoolId: 'arn:aws:cognito-idp:us-west-2:343544725688:userpool',
+    userPoolWebClientId: '5k6mnh7ecqv3hirdto8qu2uhga'
   }
 });
 
@@ -24,6 +26,9 @@ export const signUp = async (email, password) => {
   try {
     const newUser = await Auth.signUp({
       username: email,
+      attributes: {
+        email
+      },
       password
     });
     return newUser;
@@ -49,3 +54,84 @@ export const currentAuthenticatedUser = async () => {
     throw e;
   } 
 };
+
+export const currentAuthenticatedUserEthereumAddress = async () => {
+  try {
+    
+    let user = await currentAuthenticatedUser();
+    let username = user.username
+    
+    const drivers = await axios('https://r61qa9p3h5.execute-api.us-west-2.amazonaws.com/Prod/getDrivers');
+    let ethereumAddress = ''
+    
+    for(let i = 0; i <drivers.data.length; i++ ) {
+      let entry = drivers.data[i];
+      console.log(entry);
+      if(entry.username === username) {
+        ethereumAddress = entry.EthereumAddress;
+        console.log({ethereumAddress})
+        return ethereumAddress;
+      }
+    }
+    
+    
+  } catch (e) {
+    throw e;
+  } 
+};
+
+export const currentAuthenticatedIsKyc = async () => {
+  try {
+    
+    let user = await currentAuthenticatedUser();
+    let username = user.username
+    
+    const drivers = await axios('https://r61qa9p3h5.execute-api.us-west-2.amazonaws.com/Prod/getDrivers');
+
+    for(let i = 0; i <drivers.data.length; i++ ) {
+      let entry = drivers.data[i];
+      console.log(entry);
+      if(entry.username === username) {
+        console.log({entry});
+        
+        return entry.IS_KYC === 1;
+      }
+    }
+  } catch (e) {
+    throw e;
+  } 
+};
+
+
+export const currentAuthenticatedBalance = async () => {
+  try {
+    
+    let user = await currentAuthenticatedUser();
+    let username = user.username
+    
+    const drivers = await axios('https://r61qa9p3h5.execute-api.us-west-2.amazonaws.com/Prod/getDrivers');
+
+    for(let i = 0; i <drivers.data.length; i++ ) {
+      let entry = drivers.data[i];
+      console.log(entry);
+     if(entry.username === username) {
+        let ethereumAddress = entry.EthereumAddress;
+        if(ethereumAddress !== '') {
+          console.log({ethereumAddress})
+          const web3 = new Web3('https://rpc.slock.it/goerli');
+          
+          let balance = await web3.eth.getBalance(ethereumAddress);
+          debugger;
+          return balance;
+        }
+      }
+      return 0;
+    }
+  } catch (e) {
+    throw e;
+  } 
+};
+
+
+
+
